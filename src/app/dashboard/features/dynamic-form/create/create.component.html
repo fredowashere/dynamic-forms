@@ -1,0 +1,54 @@
+<div class="d-flex flex-wrap gap-3 p-3" style="margin: min(10vh, 10rem) auto; max-width: 1920px;">
+
+    <main style="flex: 9999 1 700px">
+        <div class="card card-body shadow" style="height: 100%">
+
+            <h6 class="display-6">{{ appForm?.name }}</h6>
+
+            <app-form *ngIf="appForm" [appForm]="appForm"></app-form>
+        </div>
+    </main>
+
+    <aside style="flex: 1 1 700px">
+        <div class="card card-body shadow" style="height: 100%">
+
+            <h6 class="display-6">Edit</h6>
+
+            <div class="app-form-list">
+                <div
+                    class="app-form-entry"
+                    *ngFor="let entry of Object.entries(dynamicFormService.getForms())"
+                    (click)="openForm(entry[1].form)"
+                >
+
+                    <div>{{ entry[0] }}</div>
+
+                    <div (click)="$event.stopPropagation()">
+                        <button
+                            class="btn btn-sm btn-outline-primary"
+                            (click)="goToUse(entry[1].form)"
+                        >
+                            <i class="bi bi-database-fill"></i> Data
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-floating mb-3">
+                <textarea
+                    #model
+                    class="form-control"
+                    id="mode"
+                    style="min-height: 600px; height: 100%;"
+                    [value]="!this.appForm ? '' : JSON.stringify(this.appForm, null, 2)"
+                ></textarea>
+                <label for="model">Form JSON</label>
+            </div>
+
+            <div class="d-flex gap-3 justify-content-end">
+                <button class="btn btn-outline-primary" (click)="onFormPreview(model.value)">Preview</button>
+                <button class="btn btn-primary" (click)="onFormSave(model.value)">Save</button>
+            </div>
+        </div>
+    </aside>
+</div>
