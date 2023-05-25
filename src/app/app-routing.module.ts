@@ -4,6 +4,11 @@ import { RouterModule, Routes } from '@angular/router';
 const routes: Routes = [
   {
     path: '',
+    redirectTo: 'dashboard',
+    pathMatch: 'full'
+  },
+  {
+    path: 'site',
     loadChildren: () =>
       import('./site/site.module').then(m => m.SiteModule)
   },
@@ -18,7 +23,6 @@ const routes: Routes = [
       import('./dashboard/dashboard.module').then(m => m.DashboardModule),
     canActivate: ["adminsOnlyGuard"]
   },
-  { path: 'DynamicForm', loadChildren: () => import('./dashboard/features/dynamic-form/dynamic-form.module').then(m => m.DynamicFormModule) },
 ];
 
 @NgModule({
