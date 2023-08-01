@@ -1,20 +1,6 @@
-<div
-	*ngIf="searchable || paginated"
-	class="d-flex justify-content-center justify-content-lg-between flex-wrap gap-2 p-3 mb-2"
->
-
-	<div>
-		<app-input
-			*ngIf="searchable"
-			style="max-width: 250px"
-			[ngControl]="searchInput"
-			name="search"
-			placeholder="Search ⌕"
-		></app-input>
-	</div>
-
-	<div class="d-flex flex-wrap justify-content-center gap-2" *ngIf="paginated">
-
+<ng-template #paginationTemplate>
+	<div class="d-flex flex-wrap justify-content-center gap-2">
+	
 		<ngb-pagination
 			[collectionSize]="collectionSize"
 			[(page)]="page"
@@ -31,11 +17,31 @@
 			[(ngModel)]="pageSize"
 			(ngModelChange)="paginate()"
 		>
-			<option [ngValue]="5">5</option>
-			<option [ngValue]="10">10</option>
-			<option [ngValue]="20">20</option>
-			<option [ngValue]="50">50</option>
+			<option *ngFor="let ps of pageSizes" [ngValue]="ps">{{ ps }}</option>
 		</select>
+	</div>
+</ng-template>
+
+<div
+	*ngIf="searchable || paginated"
+	class="d-flex justify-content-center justify-content-lg-between flex-wrap gap-2 p-3 mb-2"
+>
+
+	<div>
+		<app-input
+			*ngIf="searchable"
+			style="max-width: 250px"
+			[ngControl]="searchInput"
+			[name]="'search-input-' + _guid"
+			placeholder="Search ⌕"
+		></app-input>
+	</div>
+
+	<div
+		*ngIf="paginated"
+		class="d-flex flex-wrap justify-content-center gap-2"
+	>
+		<ng-container *ngTemplateOutlet="paginationTemplate" />
 	</div>
 </div>
 
@@ -50,7 +56,11 @@
 						<input
 							class="form-check-input"
 							type="checkbox"
-							(change)="$any($event.currentTarget).checked ? onEveryRowSelect() : onEveryRowDeselect()"
+							(change)="
+								$any($event.currentTarget).checked
+									? onEveryRowSelect()
+									: onEveryRowDeselect()
+							"
 						>
 					</div>
 				</th>
@@ -72,8 +82,12 @@
 								<input
 									class="form-check-input"
 									type="checkbox"
-									[(ngModel)]="item._.selected"
-									(change)="$any($event.currentTarget).checked ? onRowSelect(item) : onRowDeselect(item)"
+									[(ngModel)]="item._selected"
+									(change)="
+										$any($event.currentTarget).checked
+											? onRowSelect(item)
+											: onRowDeselect(item)
+									"
 								>
 							</div>
 						</td>
@@ -88,13 +102,31 @@
 							></button>
 						</td>
 			
-						<ng-container *ngTemplateOutlet="tbody; context: { $implicit: item, term$: lastTerm$ }"></ng-container>
+						<ng-container
+							*ngTemplateOutlet="
+								tbody;
+								context: {
+									$implicit: item,
+									index: i,
+									term$: lastTerm$
+								}
+							"
+						></ng-container>
 					</tr>
 	
 					<tr *ngIf="rowExpand">
 						<td class="row-expand" colspan="99">
 							<div #collapse="ngbCollapse" [(ngbCollapse)]="_row.collapsed">
-								<ng-container *ngTemplateOutlet="rowExpand; context: { $implicit: item, term$: searchInput.valueChanges }"></ng-container>
+								<ng-container
+									*ngTemplateOutlet="
+										rowExpand;
+										context: {
+											$implicit: item,
+											index: i,
+											term$: lastTerm$
+										}
+									"
+								></ng-container>
 							</div>
 						</td>
 					</tr>
@@ -104,7 +136,7 @@
 			</ng-container>
 		</tbody>
 
-		<tfoot *ngIf="tfoot">
+		<tfoot *ngIf="tfoot && items?.length">
 			<tr>
 				<ng-container *ngTemplateOutlet="tfoot"></ng-container>
 			</tr>
@@ -122,3 +154,26 @@
 		{{ emptyMessage }}
 	</div>
 </ng-template>
+
+<div
+	*ngIf="duplicateControls && (searchable || paginated)"
+	class="d-flex justify-content-center justify-content-lg-between flex-wrap gap-2 p-3"
+>
+
+	<div>
+		<app-input
+			*ngIf="searchable"
+			style="max-width: 250px"
+			[ngControl]="searchInputRelay"
+			[name]="'search-input-relay-' + _guid"
+			placeholder="Search ⌕"
+		></app-input>
+	</div>
+
+	<div
+		*ngIf="paginated"
+		class="d-flex flex-wrap justify-content-center gap-2"
+	>
+		<ng-container *ngTemplateOutlet="paginationTemplate" />
+	</div>
+</div>

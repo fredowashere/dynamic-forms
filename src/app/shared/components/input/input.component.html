@@ -1,26 +1,38 @@
 <ng-template #invalidFeedback let-ngControl>
     <div class="invalid-feedback">
-        <div *ngIf="ngControl.errors?.min">
-            Minimo {{ ngControl.errors?.min.min }}
-        </div>
-        <div *ngIf="ngControl.errors?.max">
-            Massimo {{ ngControl.errors?.max.max }}
-        </div>
-        <div *ngIf="ngControl.errors?.required">
-            Richiesto
-        </div>
-        <div *ngIf="ngControl.errors?.email">
-            Email invalida
-        </div>
-        <div *ngIf="ngControl.errors?.minlength">
-            Lunghezza minima {{ ngControl.errors?.minlength.requiredLength }}
-        </div>
-        <div *ngIf="ngControl.errors?.maxlength">
-            Lunghezza massima {{ ngControl.errors?.maxlength.requiredLength }}
-        </div>
-        <div *ngIf="ngControl.errors?.pattern">
-            Non corrisponde al pattern regolare {{ ngControl.errors?.pattern.requiredPattern }}
-        </div>
+
+        <ng-container *ngIf="!onlyCustomErrors">
+
+            <div *ngIf="ngControl.errors?.min">
+                Minimum {{ ngControl.errors?.min.min }}
+            </div>
+    
+            <div *ngIf="ngControl.errors?.max">
+                Maximum {{ ngControl.errors?.max.max }}
+            </div>
+    
+            <div *ngIf="ngControl.errors?.required">
+                Required
+            </div>
+    
+            <div *ngIf="ngControl.errors?.email">
+                Invalid email
+            </div>
+    
+            <div *ngIf="ngControl.errors?.minlength">
+                Minimum length {{ ngControl.errors?.minlength.requiredLength }}
+            </div>
+    
+            <div *ngIf="ngControl.errors?.maxlength">
+                Maximum length {{ ngControl.errors?.maxlength.requiredLength }}
+            </div>
+    
+            <div *ngIf="ngControl.errors?.pattern">
+                Invalid format
+            </div>
+        </ng-container>
+
+        <ng-content select="[customErrors]"></ng-content>
     </div>
 </ng-template>
 
@@ -39,6 +51,7 @@
                 class="form-control"
                 [id]="_name"
                 [placeholder]="placeholder"
+                [minlength]="minLength"
                 [maxlength]="maxLength"
             >
         </ng-container>
@@ -52,6 +65,7 @@
                 class="form-control"
                 [id]="_name"
                 [placeholder]="placeholder"
+                [minlength]="minLength"
                 [maxlength]="maxLength"
             >
         </ng-template>
@@ -78,6 +92,7 @@
             class="form-control"
             [id]="_name"
             [placeholder]="placeholder"
+            [minlength]="minLength"
             [maxlength]="maxLength"
         >
 
@@ -103,6 +118,7 @@
             class="form-control"
             [id]="_name"
             [placeholder]="placeholder"
+            [step]="step"
             [min]="min"
             [max]="max"
         >
@@ -122,6 +138,7 @@
             class="form-control"
             [id]="_name"
             [placeholder]="placeholder"
+            [minlength]="minLength"
             [maxlength]="maxLength"
             style="height: 100px"
         ></textarea>
@@ -231,7 +248,6 @@
             [resultTemplate]="template"
             [editable]="false"
             [disabled]="disabled"
-            [maxlength]="maxLength"
             [(ngModel)]="autocompleteChoice"
             (focus)="focus$.next($any($event).target.value)"
             (click)="onAutocompleteClick(instance, $event)"
@@ -249,6 +265,48 @@
             class="reset-field reset-field--floating bi bi-x-lg"
             (click)="ngControl.setValue(null)"
         ></i>
+    </div>
+
+    <div *ngIf="type === 'tagger'">
+
+        <div class="tagger-array">
+            <span
+                *ngFor="let tag of tags"
+                class="badge d-flex align-items-center fs-6 rounded-pill bg-secondary"
+            >
+                <div>{{ formatter(tag) }}</div>
+                <button class="btn p-0 lh-0 fs-6 text-white" (click)="removeTag(tag)"><i class="bi bi-x"></i></button>
+            </span>
+        </div>
+    
+        <div class="form-floating position-relative">
+    
+            <input
+                type="text"
+                class="form-control"
+                [ngClass]="'autocomplete-' + guid"
+                #instance="ngbTypeahead"
+                [id]="_name"
+                [class.is-invalid]="isInvalid()"
+                [placeholder]="placeholder"
+                [ngbTypeahead]="search"
+                [inputFormatter]="formatter"
+                [resultFormatter]="formatter"
+                [resultTemplate]="template"
+                [editable]="false"
+                [disabled]="disabled"
+                [(ngModel)]="autocompleteChoice"
+                (focus)="focus$.next($any($event).target.value)"
+                (click)="onAutocompleteClick(instance, $event)"
+                (change)="markAsTouched()"
+                (blur)="markAsTouched()"
+                (selectItem)="taggerChoiceSelected($event)"
+            />
+    
+            <label [for]="_name">{{ label }}</label>
+        
+            <ng-container *ngTemplateOutlet="invalidFeedback; context: { $implicit: ngControl }"></ng-container>
+        </div>
     </div>
 </ng-container>
 
@@ -271,6 +329,7 @@
                     class="form-control"
                     [id]="_name"
                     [placeholder]="placeholder"
+                    [minlength]="minLength"
                     [maxlength]="maxLength"
                 >
             </ng-container>
@@ -284,6 +343,7 @@
                     class="form-control"
                     [id]="_name"
                     [placeholder]="placeholder"
+                    [minlength]="minLength"
                     [maxlength]="maxLength"
                 >
             </ng-template>
@@ -313,6 +373,7 @@
                 class="form-control"
                 [id]="_name"
                 [placeholder]="placeholder"
+                [minlength]="minLength"
                 [maxlength]="maxLength"
             >
 
@@ -339,6 +400,7 @@
             class="form-control"
             [id]="_name"
             [placeholder]="placeholder"
+            [step]="step"
             [min]="min"
             [max]="max"
         >
@@ -358,6 +420,7 @@
             class="form-control"
             [id]="_name"
             [placeholder]="placeholder"
+            [minlength]="minLength"
             [maxlength]="maxLength"
             rows="3"
         ></textarea>
@@ -469,7 +532,6 @@
                 [resultTemplate]="template"
                 [editable]="false"
                 [disabled]="disabled"
-                [maxlength]="maxLength"
                 [(ngModel)]="autocompleteChoice"
                 (focus)="focus$.next($any($event).target.value)"
                 (click)="onAutocompleteClick(instance, $event)"
@@ -486,6 +548,45 @@
                 (click)="ngControl.setValue(null)"
             ></i>
         </div>
+    </div>
+
+    <div *ngIf="type === 'tagger'">
+
+        <label class="form-label" *ngIf="label" [for]="_name">{{ label }}</label>
+    
+        <div class="tagger-array">
+            <span
+                *ngFor="let tag of tags"
+                class="badge d-flex align-items-center fs-6 rounded-pill bg-secondary"
+            >
+                <div>{{ formatter(tag) }}</div>
+                <button class="btn p-0 lh-0 fs-6 text-white" (click)="removeTag(tag)"><i class="bi bi-x"></i></button>
+            </span>
+        </div>
+    
+        <input
+            type="text"
+            class="form-control"
+            [ngClass]="'autocomplete-' + guid"
+            #instance="ngbTypeahead"
+            [id]="_name"
+            [class.is-invalid]="isInvalid()"
+            [placeholder]="placeholder"
+            [ngbTypeahead]="search"
+            [inputFormatter]="formatter"
+            [resultFormatter]="formatter"
+            [resultTemplate]="template"
+            [editable]="false"
+            [disabled]="disabled"
+            [(ngModel)]="autocompleteChoice"
+            (focus)="focus$.next($any($event).target.value)"
+            (click)="onAutocompleteClick(instance, $event)"
+            (change)="markAsTouched()"
+            (blur)="markAsTouched()"
+            (selectItem)="taggerChoiceSelected($event)"
+        />
+    
+        <ng-container *ngTemplateOutlet="invalidFeedback; context: { $implicit: ngControl }"></ng-container>
     </div>
 </ng-template>
 
@@ -532,46 +633,6 @@
           {{ opt.text }}
         </label>
     </div>
-</div>
-
-<div *ngIf="type === 'tagger'">
-
-    <label class="form-label" *ngIf="label" [for]="_name">{{ label }}</label>
-
-    <div class="d-flex flex-wrap gap-2 mb-2">
-        <span
-            *ngFor="let tag of tags"
-            class="badge d-flex align-items-center fs-6 rounded-pill bg-secondary"
-        >
-            <div>{{ formatter(tag) }}</div>
-            <button class="btn p-0 lh-0 fs-6 text-white" (click)="removeTag(tag)"><i class="bi bi-x"></i></button>
-        </span>
-    </div>
-
-    <input
-        type="text"
-        class="form-control"
-        [ngClass]="'autocomplete-' + guid"
-        #instance="ngbTypeahead"
-        [id]="_name"
-        [class.is-invalid]="isInvalid()"
-        [placeholder]="placeholder"
-        [ngbTypeahead]="search"
-        [inputFormatter]="formatter"
-        [resultFormatter]="formatter"
-        [resultTemplate]="template"
-        [editable]="false"
-        [disabled]="disabled"
-        [maxlength]="maxLength"
-        [(ngModel)]="autocompleteChoice"
-        (focus)="focus$.next($any($event).target.value)"
-        (click)="onAutocompleteClick(instance, $event)"
-        (change)="markAsTouched()"
-        (blur)="markAsTouched()"
-        (selectItem)="taggerChoiceSelected($event)"
-    />
-
-    <ng-container *ngTemplateOutlet="invalidFeedback; context: { $implicit: ngControl }"></ng-container>
 </div>
 
 <div *ngIf="helper" class="form-text ps-2">{{ helper }}</div>
