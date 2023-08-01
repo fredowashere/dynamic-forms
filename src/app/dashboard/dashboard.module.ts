@@ -11,12 +11,12 @@ const routes: Routes = [
     path: '',
     component: DashboardComponent,
     children: [
-      { path: '', redirectTo: 'dynamic-form', pathMatch: 'full' },
+      { path: '', redirectTo: 'progetti', pathMatch: 'full' },
       {
-        path: 'dynamic-form',
+        path: 'organizzazioni',
         loadChildren: () =>
-          import('./features/dynamic-form/dynamic-form.module').then(m => m.DynamicFormModule)
-      }
+          import('./features/organizzazioni/organizzazioni.module').then(m => m.OrganizzazioniModule)
+      },
     ]
   },
 ];
