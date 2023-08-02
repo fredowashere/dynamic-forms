@@ -2,9 +2,10 @@ import { CommonModule } from "@angular/common";
 import { NgModule } from "@angular/core";
 import { RouterModule, Routes } from "@angular/router";
 import { SharedModule } from "src/app/shared/shared.module";
-import { OrganizzazioniComponent } from "./components/organizzazioni.component";
-import { UtentiComponent } from "./components/utenti.component";
-import { ProgettiComponent } from "./components/progetti.componente";
+import { OrganizzazioniComponent } from "./components/organizzazioni/organizzazioni.component";
+import { UtentiComponent } from "./components/utenti/utenti.component";
+import { ProgettiComponent } from "./components/progetti/progetti.componente";
+import { UtenteDialogComponent } from "./components/utenti/utente-dialog.component";
 
 const routes: Routes = [
     { 
@@ -17,6 +18,7 @@ const routes: Routes = [
     declarations: [
       OrganizzazioniComponent,
       UtentiComponent,
+      UtenteDialogComponent,
       ProgettiComponent
     ],
     imports: [

@@ -1,5 +1,5 @@
 import { Component } from "@angular/core";
-import { Organization, StateService } from "../../commons/services/state.service";
+import { Organization, StateService } from "../../../commons/services/state.service";
 
 @Component({
     template: `
@@ -68,7 +68,7 @@ import { Organization, StateService } from "../../commons/services/state.service
         <ng-template #rowExpand let-organization>
             <div
                 class="py-5 px-3"
-                style="background: linear-gradient(180deg, rgb(225 225 225 / 25%), rgba(135, 90, 25, 0.25));"
+                style="background: linear-gradient(155deg, rgb(225 225 225 / 25%), rgba(135, 90, 25, 0.25));"
                 *ngIf="{ activeId: 1 } as d"
             >
                 <ul ngbNav #nav="ngbNav" [(activeId)]="d.activeId" class="nav-tabs">
@@ -84,20 +84,6 @@ import { Organization, StateService } from "../../commons/services/state.service
                         <a ngbNavLink>Utenti</a>
                         <ng-template ngbNavContent>
                             <app-utenti [organizationId]="organization.id"></app-utenti>
-                        </ng-template>
-                    </li>
-
-                    <li [ngbNavItem]="3">
-                        <a ngbNavLink>Modelli</a>
-                        <ng-template ngbNavContent>
-                            Hello World
-                        </ng-template>
-                    </li>
-
-                    <li [ngbNavItem]="4">
-                        <a ngbNavLink>Dataset</a>
-                        <ng-template ngbNavContent>
-                            Hello World
                         </ng-template>
                     </li>
                 </ul>

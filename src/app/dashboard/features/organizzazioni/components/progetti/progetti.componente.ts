@@ -1,5 +1,5 @@
 import { Component, Input } from "@angular/core";
-import { Project, StateService } from "../../commons/services/state.service";
+import { Project, StateService } from "../../../commons/services/state.service";
 
 @Component({
     selector: "app-progetti",
