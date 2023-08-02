@@ -21,7 +21,7 @@ import { UtenteDialogComponent } from "./utente-dialog.component";
     #dt
     [thead]="thead"
     [tbody]="tbody"
-    [items]="state.selectOrganizationById(organizationId)?.users || []"
+    [items]="state.getUsers(organizationId)"
     [searchable]="[
         'firstName',
         'lastName',
@@ -72,7 +72,7 @@ import { UtenteDialogComponent } from "./utente-dialog.component";
                     type="button"
                     class="btn btn-danger"
                     [disabled]="user.roles.includes('manager')"
-                    (click)="delete(user)"
+                    (click)="delete(user.id)"
                 >
                     <i class="bi bi-trash3"></i>
                 </button>
@@ -96,7 +96,10 @@ export class UtentiComponent {
 
     async create() {
 
-        const modalRef = this.modalService.open(UtenteDialogComponent);
+        const modalRef = this.modalService.open(
+            UtenteDialogComponent,
+            { size: "lg", centered: true }
+        );
         modalRef.componentInstance.organizationId = this.organizationId;
 
         await modalRef.result;
@@ -104,14 +107,18 @@ export class UtentiComponent {
 
     async update(user: User) {
 
-        const modalRef = this.modalService.open(UtenteDialogComponent);
+        const modalRef = this.modalService.open(
+            UtenteDialogComponent,
+            { size: "lg", centered: true }
+        );
         modalRef.componentInstance.organizationId = this.organizationId;
         modalRef.componentInstance.userId = user.id;
 
         await modalRef.result;
     }
 
-    delete(user: User) {
-
+    delete(userId: number) {
+        const allowed = confirm("Se sicuro di voler procedere?");
+        if (allowed) this.state.deleteUser(this.organizationId, userId);
     }
 }

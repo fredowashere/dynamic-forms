@@ -19,46 +19,51 @@ import { ROLES, StateService, User } from '../../../commons/services/state.servi
         </div>
 
         <div class="modal-body">
-            <form class="d-grid gap-2">
+            <form autocomplete="off" novalidate>
 
-                <app-input
-                    name="firstName"
-                    label="First name"
-                    [ngControl]="form.controls.firstName"
-                    [floatingLabel]="true"
-                ></app-input>
+                <div class="flexgrid flexgrid--2">
 
-                <app-input
-                    name="lastName"
-                    label="Last name"
-                    [ngControl]="form.controls.lastName"
-                    [floatingLabel]="true"
-                ></app-input>
+                    <app-input
+                        name="firstName"
+                        label="First name"
+                        [ngControl]="form.controls.firstName"
+                        [floatingLabel]="true"
+                    ></app-input>
+        
+                    <app-input
+                        name="lastName"
+                        label="Last name"
+                        [ngControl]="form.controls.lastName"
+                        [floatingLabel]="true"
+                    ></app-input>
+        
+                    <app-input
+                        name="username"
+                        label="Username *"
+                        type="text"
+                        [ngControl]="form.controls.username"
+                        [floatingLabel]="true"
+                    ></app-input>
+        
+                    <app-input
+                        name="password"
+                        label="Password *"
+                        type="password"
+                        [ngControl]="form.controls.password"
+                        [floatingLabel]="true"
+                    ></app-input>
+                </div>
 
-                <app-input
-                    name="username"
-                    label="Username *"
-                    type="text"
-                    [ngControl]="form.controls.username"
-                    [floatingLabel]="true"
-                ></app-input>
-
-                <app-input
-                    name="password"
-                    label="Password *"
-                    type="password"
-                    [ngControl]="form.controls.password"
-                    [floatingLabel]="true"
-                ></app-input>
-
-                <app-input
-                    name="roles"
-                    label="Roles"
-                    type="tagger"
-                    [options]="ROLES"
-                    [ngControl]="form.controls.roles"
-                    [floatingLabel]="true"
-                ></app-input>
+                <div class="flexgrid">
+                    <app-input
+                        name="roles"
+                        label="Roles"
+                        type="tagger"
+                        [options]="ROLES"
+                        [ngControl]="form.controls.roles"
+                        [floatingLabel]="true"
+                    ></app-input>
+                </div>
             </form>
         </div>
         
@@ -107,9 +112,7 @@ export class UtenteDialogComponent implements OnInit {
     ngOnInit() {
         if (this.userId) {
 
-            this.user = this.state.selectUserById(this.userId);
-
-            console.log(this.userId, this.user);
+            this.user = this.state.getUserById(this.organizationId!, this.userId);
 
             if (this.user) {
                 this.form.patchValue({ ...this.user });
@@ -126,8 +129,8 @@ export class UtenteDialogComponent implements OnInit {
         if (this.form.invalid) return;
 
         this.state.insertUser(
-            { ...this.form.getRawValue() },
-            this.organizationId
+            this.organizationId!,
+            { ...this.form.getRawValue() }
         );
 
         this.activeModal.close();
@@ -138,6 +141,7 @@ export class UtenteDialogComponent implements OnInit {
         if (!this.user || this.form.invalid) return;
 
         this.state.updateUser(
+            this.organizationId!,
             this.user.id!,
             { ...this.form.getRawValue() }
         );

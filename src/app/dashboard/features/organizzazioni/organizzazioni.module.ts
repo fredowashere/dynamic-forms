@@ -4,8 +4,10 @@ import { RouterModule, Routes } from "@angular/router";
 import { SharedModule } from "src/app/shared/shared.module";
 import { OrganizzazioniComponent } from "./components/organizzazioni/organizzazioni.component";
 import { UtentiComponent } from "./components/utenti/utenti.component";
-import { ProgettiComponent } from "./components/progetti/progetti.componente";
+import { ProgettiComponent } from "./components/progetti/progetti.component";
 import { UtenteDialogComponent } from "./components/utenti/utente-dialog.component";
+import { OrganizzazioneDialogComponent } from "./components/organizzazioni/organizzazione-dialog.component";
+import { ProgettoDialogComponent } from "./components/progetti/progetto-dialog.component";
 
 const routes: Routes = [
     { 
@@ -17,9 +19,11 @@ const routes: Routes = [
 @NgModule({
     declarations: [
       OrganizzazioniComponent,
+      OrganizzazioneDialogComponent,
       UtentiComponent,
       UtenteDialogComponent,
-      ProgettiComponent
+      ProgettiComponent,
+      ProgettoDialogComponent
     ],
     imports: [
       CommonModule,

@@ -1,5 +1,7 @@
 import { Component, Input } from "@angular/core";
 import { Project, StateService } from "../../../commons/services/state.service";
+import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
+import { ProgettoDialogComponent } from "./progetto-dialog.component";
 
 @Component({
     selector: "app-progetti",
@@ -19,7 +21,7 @@ import { Project, StateService } from "../../../commons/services/state.service";
     #dt
     [thead]="thead"
     [tbody]="tbody"
-    [items]="state.selectOrganizationById(organizationId)?.projects || []"
+    [items]="state.getProjects(organizationId)"
     [searchable]="[ 'name', 'description' ]"
     [paginated]="true"
     [pageSize]="5"
@@ -95,18 +97,35 @@ export class ProgettiComponent {
     @Input("organizationId") organizationId = -1;
 
     constructor(
-        public state: StateService
+        public state: StateService,
+        private modalService: NgbModal,
     ) {}
 
-    create() {
+    async create() {
 
+        const modalRef = this.modalService.open(
+            ProgettoDialogComponent,
+            { size: "xl", centered: true }
+        );
+        modalRef.componentInstance.organizationId = this.organizationId;
+
+        await modalRef.result;
     }
 
-    update(item: Project) {
+    async update(project: Project) {
 
+        const modalRef = this.modalService.open(
+            ProgettoDialogComponent,
+            { size: "xl", centered: true }
+        );
+        modalRef.componentInstance.organizationId = this.organizationId;
+        modalRef.componentInstance.projectId = project.id;
+
+        await modalRef.result;
     }
 
-    delete(item: Project) {
-
+    delete(projectId: number) {
+        const allowed = confirm("Se sicuro di voler procedere?");
+        if (allowed) this.state.deleteProject(this.organizationId, projectId);
     }
 }
