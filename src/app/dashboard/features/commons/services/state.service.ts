@@ -80,7 +80,6 @@ export interface Project {
     approvalCount: number;
     participantsRequired: number;
     participants: User[];
-    datapoints: number;
     status: "pending" | "accepted" | "running";
 }
 
@@ -142,7 +141,6 @@ export class StateService {
                     approvalCount: 0,
                     participantsRequired: 10,
                     participants: [ ],
-                    datapoints: 0,
                     status: "pending"
                 },
             ],
@@ -221,7 +219,6 @@ export class StateService {
                             roles: [ ROLE.EMITTER ]
                         }
                     ],
-                    datapoints: 1024,
                     status: "running"
                 },
             ],

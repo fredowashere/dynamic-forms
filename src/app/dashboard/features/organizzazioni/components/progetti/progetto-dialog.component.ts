@@ -407,7 +407,6 @@ export class ProgettoDialogComponent implements OnInit {
                 approvalCount: 0,
                 participantsRequired: 0,
                 participants: [],
-                datapoints: 0,
                 status: "pending"
             }
         );
@@ -430,7 +429,6 @@ export class ProgettoDialogComponent implements OnInit {
                 approvalCount: 0,
                 participantsRequired: 0,
                 participants: [],
-                datapoints: 0,
                 status: "pending"
             }
         );

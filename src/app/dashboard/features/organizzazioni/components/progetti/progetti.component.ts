@@ -32,7 +32,6 @@ import { ProgettoDialogComponent } from "./progetto-dialog.component";
         <th sortable="description" (sort)="dt.sort($any($event))">Description</th>
         <th sortable="approvalCount" (sort)="dt.sort($any($event))">Approvals</th>
         <th sortable="participants.length" (sort)="dt.sort($any($event))">Participants</th>
-        <th sortable="datapoints" (sort)="dt.sort($any($event))">Datapoints</th>
         <th sortable="status" (sort)="dt.sort($any($event))">Status</th>
         <th style="width: 10rem"></th>
     </ng-template>
@@ -56,33 +55,18 @@ import { ProgettoDialogComponent } from "./progetto-dialog.component";
         </td>
 
         <td>
-            {{ project.datapoints }}
-        </td>
-
-        <td>
             {{ project.status === 'pending' ? 'waiting for approval' : project.status }}
         </td>
 
         <td>
-            <div class="d-flex gap-2 justify-content-center">
-
-                <button
-                    type="button"
-                    class="btn btn-primary"
-                    [disabled]="project.status == 'running'"
-                    (click)="update(project)"
-                >
-                    <i class="bi bi-pencil"></i>
-                </button>
-
-                <button
-                    type="button"
-                    class="btn btn-danger"
-                    [disabled]="project.status == 'running'"
-                    (click)="delete(project)"
-                >
-                    <i class="bi bi-trash3"></i>
-                </button>
+            <div ngbDropdown container="body">
+                <button type="button" class="btn btn-outline-primary" ngbDropdownToggle>Actions</button>
+                <div ngbDropdownMenu>
+                    <button ngbDropdownItem (click)="update(project)">Edit</button>
+                    <button ngbDropdownItem (click)="duplicate(project)">Duplicate</button>
+                    <div class="dropdown-divider"></div>
+                    <button ngbDropdownItem (click)="delete(project.id)">Delete</button>
+                </div>
             </div>
         </td>
     </ng-template>
@@ -122,6 +106,10 @@ export class ProgettiComponent {
         modalRef.componentInstance.projectId = project.id;
 
         await modalRef.result;
+    }
+
+    duplicate(project: Project) {
+        this.state.insertProject(this.organizationId, project);
     }
 
     delete(projectId: number) {
