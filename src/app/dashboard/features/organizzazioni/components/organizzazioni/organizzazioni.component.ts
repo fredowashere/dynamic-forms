@@ -81,6 +81,7 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
                 *ngIf="{ activeId: 1 } as d"
                 [class.yellow-grad]="d.activeId === 1"
                 [class.green-grad]="d.activeId === 2"
+                [class.blue-grad]="d.activeId === 3"
             >
                 <ul ngbNav #nav="ngbNav" [(activeId)]="d.activeId" class="nav-tabs">
 
@@ -117,6 +118,10 @@ import { NgbModal } from "@ng-bootstrap/ng-bootstrap";
 
         .green-grad {
             background: linear-gradient(155deg, rgb(225 225 225 / 25%), rgba(90, 135, 25, 0.25))
+        }
+
+        .blue-grad {
+            background: linear-gradient(155deg, rgb(225 225 225 / 25%), rgba(90, 25, 135, 0.25))
         }
     `]
 })

@@ -8,11 +8,16 @@ import { ProgettiComponent } from "./components/progetti/progetti.component";
 import { UtenteDialogComponent } from "./components/utenti/utente-dialog.component";
 import { OrganizzazioneDialogComponent } from "./components/organizzazioni/organizzazione-dialog.component";
 import { ProgettoDialogComponent } from "./components/progetti/progetto-dialog.component";
+import { CsvCheckerComponent } from "./components/csv-checker/csv-checker.component";
 
 const routes: Routes = [
     { 
       path: '',
       component: OrganizzazioniComponent,
+    },
+    { 
+      path: 'csv-checker',
+      component: CsvCheckerComponent,
     },
   ];
 
@@ -23,7 +28,8 @@ const routes: Routes = [
       UtentiComponent,
       UtenteDialogComponent,
       ProgettiComponent,
-      ProgettoDialogComponent
+      ProgettoDialogComponent,
+      CsvCheckerComponent
     ],
     imports: [
       CommonModule,

@@ -36,6 +36,12 @@ export class DashboardSidebarComponent {
       icon: 'bi-buildings-fill',
       path: '/dashboard/organizzazioni',
     },
+    {
+      isActive: false,
+      title: 'CSV checker',
+      icon: 'bi bi-card-checklist',
+      path: '/dashboard/organizzazioni/csv-checker',
+    }
   ];
 
   username$: Observable<string | undefined>; 

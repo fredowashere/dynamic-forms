@@ -140,7 +140,7 @@ export class StateService {
                     reviewsRequired: 1,
                     approvalCount: 0,
                     participantsRequired: 10,
-                    participants: [ ],
+                    participants: [],
                     status: "pending"
                 },
             ],
