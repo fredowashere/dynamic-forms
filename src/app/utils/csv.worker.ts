@@ -20,32 +20,9 @@ addEventListener("message", ({ data }) => {
 });
 
 export function CSVToArray(csvText: string): any[] {
-  const dataRows = csvText.slice(csvText.indexOf("\n") + 1).split("\n");
-  return dataRows.map((row) => row.split(","));
+  return csvText.split("\n").map(row => row.split(","));
 }
 
 export function arrayToCSV(data: any[]): string {
-
-  if (data.length == 0) return "";
-
-  const propertyNames = Object.keys(data[0]);
-  const rowWithPropertyNames = propertyNames.join(",") + "\n";
-
-  const rows: string[] = [];
-  data.forEach((item) => {
-
-    const values: string[] = [];
-    propertyNames.forEach((key) => {
-      let val: any = item[key];
-      val = (val !== undefined && val !== null) ? new String(val) : "";
-      values.push(val);
-    });
-
-    rows.push(values.join(","));
-  });
-
-  let csvContent = rowWithPropertyNames;
-  csvContent += rows.join("\n");
-
-  return csvContent;
+  return data.map(row => row.join(",")).join("\n");
 }
